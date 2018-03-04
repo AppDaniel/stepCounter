@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.macbookair.stepcounter.MainActivity">
+
+
+    <item
+        android:id="@+id/profil"
+        android:orderInCategory="100"
+        android:title="@string/profil"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/väder"
+        android:orderInCategory="100"
+        android:title="@string/väder"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/historik"
+        android:onClick="onButtonClick"
+        android:orderInCategory="100"
+        android:title="@string/historik"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>

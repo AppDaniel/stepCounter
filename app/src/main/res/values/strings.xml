@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">stepCounter</string>
+    <string name="action_settings">Settings</string>
+    <string name="profil">Profil</string>
+    <string name="väder">Väder</string>
+    <string name="historik">Historik</string>
+
+</resources>
