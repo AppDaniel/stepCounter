@@ -10,9 +10,11 @@ public class Steg {
     private long id;
     private String date;
 
+
+
     @Override
     public String toString() {
-        return step;
+        return "Date : " + date + " " + "Steps : " + step;
     }
 
 
@@ -20,8 +22,9 @@ public class Steg {
         return step;
     }
 
-    public void setSteps(String steps) {
+    public String setSteps(String steps) {
         this.step = steps;
+        return steps;
     }
 
     public long getId() {

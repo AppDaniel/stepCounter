@@ -10,13 +10,12 @@
         android:title="@string/profil"
         app:showAsAction="never" />
     <item
-        android:id="@+id/väder"
+        android:id="@+id/weather"
         android:orderInCategory="100"
-        android:title="@string/väder"
+        android:title="@string/weather"
         app:showAsAction="never" />
     <item
         android:id="@+id/historik"
-        android:onClick="onButtonClick"
         android:orderInCategory="100"
         android:title="@string/historik"
         app:showAsAction="never" />

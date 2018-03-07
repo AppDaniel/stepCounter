@@ -6,25 +6,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
-import android.media.MediaPlayer;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class stepService extends Service implements SensorEventListener {
 
     SensorManager sensorManager;
-    int steps=0;
-
-
+    int steps;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -32,36 +22,49 @@ public class stepService extends Service implements SensorEventListener {
     }
 
     @Override
-    public void onCreate(){
-
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
-
-        for (Sensor sensor: sensors){
-            Log.i("tag",sensor.getName());
-        }
+    public void onDestroy() {
+        super.onDestroy();
     }
 
+    @Override
+    public void onCreate() {
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager.registerListener(this, sensorManager.
+                getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        DatabaseHandler db = new DatabaseHandler(this);
+        String test = db.findSteps();
+
+        steps = Integer.parseInt(test);
+
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType()== Sensor.TYPE_ACCELEROMETER){
 
-            float [] values = event.values;
+
+
+
+            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+            float[] values = event.values;
             float x = values[0];
             float y = values[1];
             float z = values[2];
 
 
-            float absoluteAcceleration = (x * x + y * y + z * z)/
+            float absoluteAcceleration = (x * x + y * y + z * z) /
                     (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
 
-            if (absoluteAcceleration>=4){
+            if (absoluteAcceleration >= 4) {
 
                 steps++;
 
-//                Här måste vi skcika tillbaka steps!
-//                showStep.setText("steg : " + steps);
+                DatabaseHandler sqlFinder;
+                sqlFinder = new DatabaseHandler(this);
+                sqlFinder.insert();
+
+                String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+                Steg step = sqlFinder.update(steps, dateTime);
 
             }
 
@@ -75,18 +78,8 @@ public class stepService extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        sensorManager.registerListener(this, sensorManager.
-                getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
-        return super.onStartCommand(intent, flags, startId);
+        Thread thread = new Thread();
+        thread.start();
+        return Service.START_STICKY;
     }
-
-    @Override
-    public void onDestroy() {
-
-        sensorManager.unregisterListener(this);
-    }
-
-
-
 }

@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".HistrikLista"></activity>
         <service
             android:name=".stepService"
             android:enabled="true"

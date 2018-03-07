@@ -5,11 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by macbookair on 2018-03-03.
@@ -24,16 +25,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private SQLiteDatabase database;
 
-    public DatabaseHandler (Context context){
-        super(context,"database.db", null, 13);
+    public DatabaseHandler(Context context) {
+        super(context, "database.db", null, 13);
 
     }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-//        final String DATABASE_CREAT ="CREATE TABLE tablesteps (step TEXT, datetime INTEGER, id INTEGER PRIMARY KEY)";
-//        final String DATABASE_CREAT ="create table tablesteps (id integer primary key autoincrement, step text not null)";
-        final String DATABASE_CREAT ="create table tablesteps (id integer primary key autoincrement, step text, datetime text)";
+        final String DATABASE_CREAT = "create table tablesteps (id integer primary key autoincrement, step text, datetime text)";
         sqLiteDatabase.execSQL(DATABASE_CREAT);
 
     }
@@ -41,59 +41,58 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_STEPS );
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_STEPS);
         onCreate(sqLiteDatabase);
 
 
     }
 
-    void insert(){
+    void insert() {
 
         database = getWritableDatabase();
 
     }
 
-    Steg createDay(String step, String date ){
+    Steg createDay(Integer step, String date) {
+
 
         ContentValues contentValues = new ContentValues();
+        ContentValues uppdateDB = new ContentValues();
+        Steg steg1 = new Steg();
+
         contentValues.put(COLUMN_STEP, step);
         contentValues.put(COLUMN_DATETIME, date);
 
-
+        String stepToSendBack = Integer.toString(step);
 
         long id = database.insert(TABLE_STEPS, null, contentValues);
 
 
-
-
-
-        Steg steg = new Steg();
-        steg.setId(id);
-
-        return steg;
-
+        steg1.setId(id);
+        steg1.setSteps(stepToSendBack);
+//    }
+        return steg1;
     }
 
-    List<Steg> putAllPersonInList(){
+    List<Steg> putAllPersonInList() {
         List<Steg> steps = new ArrayList<>();
-        String[] allColumns = {COLUMN_ID,COLUMN_STEP, COLUMN_DATETIME};
-//        String[] allColumns = {COLUMN_ID,COLUMN_STEP};
-         Cursor cursor = database.query(TABLE_STEPS, allColumns,
+        String[] allColumns = {COLUMN_ID, COLUMN_STEP,COLUMN_DATETIME};
+        Cursor cursor = database.query(TABLE_STEPS, allColumns,
                 null, null, null, null, null);
         cursor.moveToFirst();
 
-        while (!cursor.isAfterLast()){
+        while (!cursor.isAfterLast()) {
 
-            Steg steg = rowToObject(cursor);
+            Steg date = rowToObject(cursor);
 
-            steps.add(steg);
+            steps.add(date);
             cursor.moveToNext();
         }
         cursor.close();
         return steps;
     }
 
-    private Steg rowToObject(Cursor cursor){
+    private Steg rowToObject(Cursor cursor) {
 
         Steg step = new Steg();
 
@@ -107,26 +106,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    void deleteFirstName(Steg steg){
-        Long id = steg.getId();
-        database.delete(TABLE_STEPS, COLUMN_ID+ "="+ id, null);
-
-    }
-
-    void update(Integer steps, Integer amountOfrows){
+    Steg update(Integer steps, String date) {
         ContentValues uppdateDB = new ContentValues();
 
 
-//        UPDATE table set col = 1 WHERE id = (SELECT MAX(id) FROM table)
+        int datum = Integer.parseInt(date.toString());
 
-        String updateQuery = "Update TABLE_STEPS set COLUMN_STEP = 1 WEHRE id=(SELECT max(id)";
-        Log.i("tag",updateQuery);
-
-        uppdateDB.put("step",steps);
-        database.update(TABLE_STEPS,uppdateDB, "step=" + 78, null);
+        uppdateDB.put("datetime", date);
+        uppdateDB.put("step", steps);
+        database.update(TABLE_STEPS, uppdateDB, "datetime=" + datum, null);
 
 
+        return null;
     }
+
+
+//    kan änvända denna för att räkna ut hur många rader vi har, kanske för
+//    antal dagar man användt appen..
     public int getProfilesCount() {
         String countQuery = "SELECT  * FROM " + TABLE_STEPS;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -137,6 +133,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
+        public String findSteps()
+        {
+
+            String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+            String testtest ="";
+            String allRecipesQuery = "SELECT * FROM "+ TABLE_STEPS + " WHERE " + COLUMN_DATETIME + " = " + dateTime;
+
+            database = this.getWritableDatabase();
+            Cursor cursor = database.rawQuery(allRecipesQuery, null);
+
+
+            if (cursor.moveToFirst())
+            {
+                do {
+                    Steg steg = new Steg();
+                    testtest = steg.setSteps(cursor.getString(1));
+
+                }while (cursor.moveToNext());
+            }
+            return testtest;
+        }
 
 }
 
