@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,10 +18,12 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity{
 
-    public static int steps = 0;
+    private static int steps = 0;
     TextView showStep;
     private DatabaseHandler sqlFinder;
     ChangeActivities changeActivities;
+    private ProgressBar progressBar;
+    String dateTime;
 
     @Override
 
@@ -33,31 +36,53 @@ public class MainActivity extends AppCompatActivity{
         sqlFinder = new DatabaseHandler(this);
         sqlFinder.insert();
 
+        String checkTodaysDate = sqlFinder.findTodaysDate();
+        dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
 
-        startService(new Intent(this, stepService.class));
+        if (checkTodaysDate.equals(dateTime)){
+            startService(new Intent(this, StepService.class));
+        }else {
+
+            StepCounter step = sqlFinder.createDay(steps, dateTime);
+        }
         showStep = findViewById(R.id.amountSteps);
+
+        Thread upDateTextView = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String findSteps =  sqlFinder.findSteps();
+                                showStep.setText(findSteps);
+                                progressBar = findViewById(R.id.progressBarSteps);
+                                int stepsTaken = Integer.parseInt(findSteps);
+
+                                progressBar(stepsTaken);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+
+        upDateTextView.start();
+
+
 //        showDebugDBAddressLogToast(this);
 
-        Button sendDataButton = findViewById(R.id.button);
-        sendDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    }
 
-                String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-                Steg step = sqlFinder.createDay(steps, dateTime);
-            }
-        });
+    private void progressBar(int stepsTaken) {
 
-        Button update = findViewById(R.id.updateBtn);
-        update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-               String findSteps =  sqlFinder.findSteps();
-                showStep.setText(findSteps);
-            }
-        });
-
+        int goal = 10;
+        int progress = stepsTaken/goal;
+        progressBar.setProgress(progress);
     }
 
 
@@ -85,14 +110,15 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+
         if (item.getItemId() == R.id.historik) {
 
-            changeActivities.StartNewActivity(MainActivity.this, HistrikLista.class);
+            changeActivities.StartNewActivity(MainActivity.this, HistoryList.class);
 
         }
         if (item.getItemId() == R.id.profil) {
 
-            changeActivities.StartNewActivity(MainActivity.this, HistrikLista.class);
+            changeActivities.StartNewActivity(MainActivity.this, HistoryList.class);
 
         }
 

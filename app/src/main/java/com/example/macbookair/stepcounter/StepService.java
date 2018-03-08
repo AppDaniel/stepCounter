@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class stepService extends Service implements SensorEventListener {
+public class StepService extends Service implements SensorEventListener {
 
     SensorManager sensorManager;
     int steps;
@@ -33,6 +33,7 @@ public class stepService extends Service implements SensorEventListener {
                 getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         DatabaseHandler db = new DatabaseHandler(this);
         String test = db.findSteps();
+
 
         steps = Integer.parseInt(test);
 
@@ -64,7 +65,7 @@ public class stepService extends Service implements SensorEventListener {
                 sqlFinder.insert();
 
                 String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-                Steg step = sqlFinder.update(steps, dateTime);
+                StepCounter step = sqlFinder.update(steps, dateTime);
 
             }
 

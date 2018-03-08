@@ -16,7 +16,7 @@ import java.util.List;
  * Created by macbookair on 2018-03-05.
  */
 
-public class HistrikLista extends ListActivity {
+public class HistoryList extends ListActivity {
 
     DatabaseHandler sqlFinder;
     ChangeActivities changeActivities;
@@ -24,14 +24,14 @@ public class HistrikLista extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.history_list);
+        setContentView(R.layout.history);
 
         sqlFinder = new DatabaseHandler(this);
         sqlFinder.insert();
 
-        List<Steg> list = sqlFinder.putAllPersonInList();
+        List<StepCounter> list = sqlFinder.putAllPersonInList();
 
-        final ArrayAdapter<Steg> arrayAdapter = new ArrayAdapter<Steg>
+        final ArrayAdapter<StepCounter> arrayAdapter = new ArrayAdapter<StepCounter>
                 (this, android.R.layout.simple_list_item_1, list);
 
         setListAdapter(arrayAdapter);
@@ -41,7 +41,7 @@ public class HistrikLista extends ListActivity {
         goHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(HistrikLista.this, MainActivity.class);
+                Intent intent=new Intent(HistoryList.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -58,7 +58,7 @@ public class HistrikLista extends ListActivity {
         if (item.getItemId()==R.id.action_settings)
         {
 
-            changeActivities.StartNewActivity(HistrikLista.this, MainActivity.class);
+            changeActivities.StartNewActivity(HistoryList.this, MainActivity.class);
 
         }
 

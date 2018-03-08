@@ -4,7 +4,7 @@ package com.example.macbookair.stepcounter;
  * Created by macbookair on 2018-03-03.
  */
 
-public class Steg {
+public class StepCounter {
 
     private String step;
     private long id;
@@ -39,7 +39,8 @@ public class Steg {
         return date;
     }
 
-    public void setDate(String date) {
+    public String setDate(String date) {
         this.date = date;
+        return date;
     }
 }

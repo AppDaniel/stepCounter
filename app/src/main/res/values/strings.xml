@@ -6,5 +6,8 @@
     <string name="historik">Historik</string>
     <string name="homeBtn">Home</string>
     <string name="StepHistory">Step History</string>
+    <string name="Uppdate">Uppdate</string>
+    <string name="Start">Start</string>
+    <string name="AmountofSteps">Loading Steps</string>
 
 </resources>

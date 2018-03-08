@@ -53,12 +53,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    Steg createDay(Integer step, String date) {
+    StepCounter createDay(Integer step, String date) {
 
 
         ContentValues contentValues = new ContentValues();
         ContentValues uppdateDB = new ContentValues();
-        Steg steg1 = new Steg();
+        StepCounter stepCounter1 = new StepCounter();
 
         contentValues.put(COLUMN_STEP, step);
         contentValues.put(COLUMN_DATETIME, date);
@@ -68,14 +68,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         long id = database.insert(TABLE_STEPS, null, contentValues);
 
 
-        steg1.setId(id);
-        steg1.setSteps(stepToSendBack);
+        stepCounter1.setId(id);
+        stepCounter1.setSteps(stepToSendBack);
 //    }
-        return steg1;
+        return stepCounter1;
     }
 
-    List<Steg> putAllPersonInList() {
-        List<Steg> steps = new ArrayList<>();
+    List<StepCounter> putAllPersonInList() {
+        List<StepCounter> steps = new ArrayList<>();
         String[] allColumns = {COLUMN_ID, COLUMN_STEP,COLUMN_DATETIME};
         Cursor cursor = database.query(TABLE_STEPS, allColumns,
                 null, null, null, null, null);
@@ -83,7 +83,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         while (!cursor.isAfterLast()) {
 
-            Steg date = rowToObject(cursor);
+            StepCounter date = rowToObject(cursor);
 
             steps.add(date);
             cursor.moveToNext();
@@ -92,9 +92,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return steps;
     }
 
-    private Steg rowToObject(Cursor cursor) {
+    private StepCounter rowToObject(Cursor cursor) {
 
-        Steg step = new Steg();
+        StepCounter step = new StepCounter();
 
         step.setId(cursor.getLong(0));
 
@@ -106,7 +106,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    Steg update(Integer steps, String date) {
+    StepCounter update(Integer steps, String date) {
         ContentValues uppdateDB = new ContentValues();
 
 
@@ -137,7 +137,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         {
 
             String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-            String testtest ="";
+            String amountOfStepsDb ="";
             String allRecipesQuery = "SELECT * FROM "+ TABLE_STEPS + " WHERE " + COLUMN_DATETIME + " = " + dateTime;
 
             database = this.getWritableDatabase();
@@ -147,13 +147,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             if (cursor.moveToFirst())
             {
                 do {
-                    Steg steg = new Steg();
-                    testtest = steg.setSteps(cursor.getString(1));
+                    StepCounter stepCounter = new StepCounter();
+                    amountOfStepsDb = stepCounter.setSteps(cursor.getString(1));
 
                 }while (cursor.moveToNext());
             }
-            return testtest;
+            return amountOfStepsDb;
         }
+    public String findTodaysDate()
+    {
+
+        String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+        String checkTheDate ="";
+        String allRecipesQuery = "SELECT * FROM "+ TABLE_STEPS + " WHERE " + COLUMN_DATETIME + " = " + dateTime;
+
+        database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(allRecipesQuery, null);
+
+
+        if (cursor.moveToFirst())
+        {
+            do {
+                StepCounter stepCounter = new StepCounter();
+                checkTheDate = stepCounter.setDate(cursor.getString(2));
+
+            }while (cursor.moveToNext());
+        }
+        return checkTheDate;
+    }
 
 }
 
