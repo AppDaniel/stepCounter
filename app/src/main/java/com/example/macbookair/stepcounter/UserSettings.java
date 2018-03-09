@@ -2,7 +2,6 @@ package com.example.macbookair.stepcounter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -63,7 +62,7 @@ public class UserSettings extends AppCompatActivity  {
             changeActivities.StartNewActivity(UserSettings.this, Profile.class);
 
         }
-        if (item.getItemId() == R.id.weather) {
+        if (item.getItemId() == R.id.home) {
 
             changeActivities.StartNewActivity(UserSettings.this, MainActivity.class);
 
@@ -77,9 +76,6 @@ public class UserSettings extends AppCompatActivity  {
         Intent endIntent = new Intent(this, StepService.class);
         stopService(endIntent);
         sqlFinder.deleteAll();
-        int steps=0;
-        String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-        StepCounter step = sqlFinder.createDay(steps, dateTime);
 
 
     }

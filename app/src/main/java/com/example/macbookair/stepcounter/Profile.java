@@ -1,27 +1,14 @@
 package com.example.macbookair.stepcounter;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.Toolbar;
-
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 /**
  * Created by macbookair on 2018-03-08.
@@ -100,7 +87,7 @@ public class Profile extends AppCompatActivity {
             changeActivities.StartNewActivity(Profile.this, HistoryList.class);
 
         }
-        if (item.getItemId() == R.id.weather) {
+        if (item.getItemId() == R.id.home) {
 
             changeActivities.StartNewActivity(Profile.this, MainActivity.class);
 

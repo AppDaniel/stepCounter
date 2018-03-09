@@ -7,8 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.EditText;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +34,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, "database.db", null, 14);
 
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -85,6 +88,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String[] allColumns = {COLUMN_ID, COLUMN_STEP, COLUMN_DATETIME, COLUMN_NAME,COLUMN_STEPGOAL};
         Cursor cursor = database.query(TABLE_STEPS, allColumns,
                 null, null, null, null, null);
+
+
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -135,9 +140,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues uppdateDB = new ContentValues();
         ContentValues contentValues = new ContentValues();
         ContentValues contentValues1 = new ContentValues();
-        String date = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+        String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
 
-        int datum = Integer.parseInt(date.toString());
+        int datum = Integer.parseInt(dateTime.toString());
         contentValues.put(COLUMN_NAME, name);
         contentValues.put(COLUMN_STEPGOAL, stepgoal);
 
@@ -235,6 +240,47 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 checkTheDate = stepCounter.setName(cursor.getString(3));
 
             } while (cursor.moveToNext());
+
+        }
+        return checkTheDate;
+    }
+    public String findNameYesterday() {
+
+        String dateTime = getYesterdayDateString();
+        String checkTheDate = "";
+        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
+                + COLUMN_DATETIME + " = " + dateTime;
+
+        database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(allRecipesQuery, null);
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                StepCounter stepCounter = new StepCounter();
+                checkTheDate = stepCounter.setName(cursor.getString(3));
+
+            } while (cursor.moveToNext());
+        }
+        return checkTheDate;
+    }
+    public String findStepGoalYesterday() {
+
+        String dateTime = getYesterdayDateString();
+        String checkTheDate = "";
+        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
+                + COLUMN_DATETIME + " = " + dateTime;
+
+        database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(allRecipesQuery, null);
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                StepCounter stepCounter = new StepCounter();
+                checkTheDate = stepCounter.setName(cursor.getString(4));
+
+            } while (cursor.moveToNext());
         }
         return checkTheDate;
     }
@@ -258,10 +304,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return checkTheDate;
     }
+
+
+
+    public String getYesterdayDateString() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        return dateFormat.format(yesterday());
+    }
+
+   private Date yesterday() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return cal.getTime();
+    }
+
     void deleteAll(){
         database.delete(TABLE_STEPS, null, null);
 
-    }
 
+    }
 }
 

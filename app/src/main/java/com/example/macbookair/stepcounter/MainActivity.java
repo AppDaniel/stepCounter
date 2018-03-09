@@ -27,12 +27,12 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private static int steps = 0;
-    TextView showStep;
+    TextView showStep,personsName;
     private DatabaseHandler sqlFinder;
     ChangeActivities changeActivities;
     private ProgressBar progressBar;
     String dateTime;
-    SensorManager sensorManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +47,41 @@ public class MainActivity extends AppCompatActivity {
         String checkTodaysDate = sqlFinder.findTodaysDate();
         dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
 
+
         if (checkTodaysDate.equals(dateTime)) {
+
             startService(new Intent(this, StepService.class));
+
         } else {
 
-//            String name = sqlFinder.findName();
-//            String goal = sqlFinder.getGoal();
-//            int goali = Integer.parseInt(goal);
+
+            String name = sqlFinder.findNameYesterday();
+            String stepGoal = sqlFinder.findStepGoalYesterday();
+            int goal;
+
             StepCounter step = sqlFinder.createDay(steps, dateTime);
-//            StepCounter something = sqlFinder.addProfile(name,goali);
+
+            if (stepGoal.isEmpty()){
+
+                name = "Name";
+                goal = 1000;
+                StepCounter something = sqlFinder.addProfile(name, goal);
+
+            }else{
+                goal = Integer.parseInt(stepGoal);
+                StepCounter something = sqlFinder.addProfile(name, goal);
+            }
+
+
+
+
+
 
         }
         showStep = findViewById(R.id.amountSteps);
+        personsName = findViewById(R.id.personsName);
+
+        personsName.setText(sqlFinder.findName().toString());
 
         Thread upDateTextView = new Thread() {
 
@@ -87,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         upDateTextView.start();
 
 
-       showDebugDBAddressLogToast(this);
+        showDebugDBAddressLogToast(this);
 
     }
 
@@ -98,14 +121,14 @@ public class MainActivity extends AppCompatActivity {
         int changegetGoal = Integer.parseInt(getGoal);
 
 
-        if (changegetGoal!=0){
-            int setGoal =  changegetGoal/100;
+        if (changegetGoal != 0) {
+            int setGoal = changegetGoal / 100;
             int progress = stepsTaken / setGoal;
 
             progressBar.setProgress(progress);
-        }else{
+        } else {
 
-        int progress = stepsTaken / goal;
+            int progress = stepsTaken / goal;
             progressBar.setProgress(progress);
         }
 
@@ -156,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public static void showDebugDBAddressLogToast(Context context) {
         if (BuildConfig.DEBUG) {
             try {
