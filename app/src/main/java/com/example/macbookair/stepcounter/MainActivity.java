@@ -1,7 +1,12 @@
 package com.example.macbookair.stepcounter;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,11 +17,14 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private static int steps = 0;
     TextView showStep;
@@ -24,9 +32,9 @@ public class MainActivity extends AppCompatActivity{
     ChangeActivities changeActivities;
     private ProgressBar progressBar;
     String dateTime;
+    SensorManager sensorManager;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -39,11 +47,16 @@ public class MainActivity extends AppCompatActivity{
         String checkTodaysDate = sqlFinder.findTodaysDate();
         dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
 
-        if (checkTodaysDate.equals(dateTime)){
+        if (checkTodaysDate.equals(dateTime)) {
             startService(new Intent(this, StepService.class));
-        }else {
+        } else {
 
+//            String name = sqlFinder.findName();
+//            String goal = sqlFinder.getGoal();
+//            int goali = Integer.parseInt(goal);
             StepCounter step = sqlFinder.createDay(steps, dateTime);
+//            StepCounter something = sqlFinder.addProfile(name,goali);
+
         }
         showStep = findViewById(R.id.amountSteps);
 
@@ -57,7 +70,7 @@ public class MainActivity extends AppCompatActivity{
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                String findSteps =  sqlFinder.findSteps();
+                                String findSteps = sqlFinder.findSteps();
                                 showStep.setText(findSteps);
                                 progressBar = findViewById(R.id.progressBarSteps);
                                 int stepsTaken = Integer.parseInt(findSteps);
@@ -74,15 +87,29 @@ public class MainActivity extends AppCompatActivity{
         upDateTextView.start();
 
 
-//        showDebugDBAddressLogToast(this);
+       showDebugDBAddressLogToast(this);
 
     }
 
     private void progressBar(int stepsTaken) {
 
+        String getGoal = sqlFinder.getGoal();
         int goal = 10;
-        int progress = stepsTaken/goal;
-        progressBar.setProgress(progress);
+        int changegetGoal = Integer.parseInt(getGoal);
+
+
+        if (changegetGoal!=0){
+            int setGoal =  changegetGoal/100;
+            int progress = stepsTaken / setGoal;
+
+            progressBar.setProgress(progress);
+        }else{
+
+        int progress = stepsTaken / goal;
+            progressBar.setProgress(progress);
+        }
+
+
     }
 
 
@@ -118,25 +145,30 @@ public class MainActivity extends AppCompatActivity{
         }
         if (item.getItemId() == R.id.profil) {
 
-            changeActivities.StartNewActivity(MainActivity.this, HistoryList.class);
+            changeActivities.StartNewActivity(MainActivity.this, Profile.class);
+
+        }
+        if (item.getItemId() == R.id.action_settings) {
+
+            changeActivities.StartNewActivity(MainActivity.this, UserSettings.class);
 
         }
 
         return super.onOptionsItemSelected(item);
     }
-//    public static void showDebugDBAddressLogToast(Context context) {
-//        if (BuildConfig.DEBUG) {
-//            try {
-//                Class<?> debugDB = Class.forName("com.amitshekhar.DebugDB");
-//                Method getAddressLog = debugDB.getMethod("getAddressLog");
-//                Object value = getAddressLog.invoke(null);
-//                Toast.makeText(context, (String) value, Toast.LENGTH_LONG).show();
-//
-//            } catch (Exception ignore) {
-//
-//            }
-//        }
-//    }
+    public static void showDebugDBAddressLogToast(Context context) {
+        if (BuildConfig.DEBUG) {
+            try {
+                Class<?> debugDB = Class.forName("com.amitshekhar.DebugDB");
+                Method getAddressLog = debugDB.getMethod("getAddressLog");
+                Object value = getAddressLog.invoke(null);
+                Toast.makeText(context, (String) value, Toast.LENGTH_LONG).show();
+
+            } catch (Exception ignore) {
+
+            }
+        }
+    }
 
 }
 

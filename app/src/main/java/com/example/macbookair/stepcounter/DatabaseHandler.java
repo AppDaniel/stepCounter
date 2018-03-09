@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,18 +23,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     final static String COLUMN_ID = "id";
     final static String COLUMN_STEP = "step";
     final static String COLUMN_DATETIME = "datetime";
+    final static String COLUMN_STEPGOAL = "stepgoal";
+    final static String COLUMN_NAME = "name";
 
     private SQLiteDatabase database;
 
     public DatabaseHandler(Context context) {
-        super(context, "database.db", null, 13);
+        super(context, "database.db", null, 14);
 
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        final String DATABASE_CREAT = "create table tablesteps (id integer primary key autoincrement, step text, datetime text)";
+        final String DATABASE_CREAT = "create table tablesteps (id integer primary key" +
+                " autoincrement, step text, datetime text, name text, stepgoal integer)";
         sqLiteDatabase.execSQL(DATABASE_CREAT);
 
     }
@@ -74,9 +78,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return stepCounter1;
     }
 
+
+
     List<StepCounter> putAllPersonInList() {
         List<StepCounter> steps = new ArrayList<>();
-        String[] allColumns = {COLUMN_ID, COLUMN_STEP,COLUMN_DATETIME};
+        String[] allColumns = {COLUMN_ID, COLUMN_STEP, COLUMN_DATETIME, COLUMN_NAME,COLUMN_STEPGOAL};
         Cursor cursor = database.query(TABLE_STEPS, allColumns,
                 null, null, null, null, null);
         cursor.moveToFirst();
@@ -102,6 +108,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         step.setDate(cursor.getString(2));
 
+        step.setName(cursor.getString(3));
+
+        step.setStepgoal(cursor.getInt(4));
+
         return step;
 
     }
@@ -120,60 +130,137 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return null;
     }
 
+    StepCounter addProfile(String name, Integer stepgoal){
 
-//    kan änvända denna för att räkna ut hur många rader vi har, kanske för
-//    antal dagar man användt appen..
-    public int getProfilesCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_STEPS;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        int count = cursor.getCount();
-        cursor.close();
-        return count;
+        ContentValues uppdateDB = new ContentValues();
+        ContentValues contentValues = new ContentValues();
+        ContentValues contentValues1 = new ContentValues();
+        String date = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+
+        int datum = Integer.parseInt(date.toString());
+        contentValues.put(COLUMN_NAME, name);
+        contentValues.put(COLUMN_STEPGOAL, stepgoal);
+
+//        uppdateDB.put("name", name);
+//        uppdateDB.put("stepgoal", stepgoal);
+
+//        database.insert(TABLE_STEPS, COLUMN_NAME, contentValues);
+//        database.insert(TABLE_STEPS, COLUMN_STEPGOAL, contentValues1);
+        uppdateDB.put("name", name);
+        uppdateDB.put("stepgoal", stepgoal);
+        database.update(TABLE_STEPS, uppdateDB, "datetime=" + datum, null);
+
+
+        return null;
+
     }
 
-
-        public String findSteps()
-        {
-
-            String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-            String amountOfStepsDb ="";
-            String allRecipesQuery = "SELECT * FROM "+ TABLE_STEPS + " WHERE " + COLUMN_DATETIME + " = " + dateTime;
-
-            database = this.getWritableDatabase();
-            Cursor cursor = database.rawQuery(allRecipesQuery, null);
-
-
-            if (cursor.moveToFirst())
-            {
-                do {
-                    StepCounter stepCounter = new StepCounter();
-                    amountOfStepsDb = stepCounter.setSteps(cursor.getString(1));
-
-                }while (cursor.moveToNext());
-            }
-            return amountOfStepsDb;
-        }
-    public String findTodaysDate()
-    {
+    public String findSteps() {
 
         String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-        String checkTheDate ="";
-        String allRecipesQuery = "SELECT * FROM "+ TABLE_STEPS + " WHERE " + COLUMN_DATETIME + " = " + dateTime;
+        String amountOfStepsDb = "";
+        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
+                + COLUMN_DATETIME + " = " + dateTime;
 
         database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(allRecipesQuery, null);
 
 
-        if (cursor.moveToFirst())
-        {
+        if (cursor.moveToFirst()) {
+            do {
+                StepCounter stepCounter = new StepCounter();
+                amountOfStepsDb = stepCounter.setSteps(cursor.getString(1));
+
+            } while (cursor.moveToNext());
+        }
+        return amountOfStepsDb;
+    }
+
+    public String findTodaysDate() {
+
+        String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+        String checkTheDate = "";
+        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
+                + COLUMN_DATETIME + " = " + dateTime;
+
+        database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(allRecipesQuery, null);
+
+
+        if (cursor.moveToFirst()) {
             do {
                 StepCounter stepCounter = new StepCounter();
                 checkTheDate = stepCounter.setDate(cursor.getString(2));
 
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         return checkTheDate;
+    }
+
+    public String sortMosteSteps() {
+
+        String mostSteps = "";
+        database = this.getWritableDatabase();
+        String[] allColumns = {COLUMN_ID, COLUMN_STEP, COLUMN_DATETIME, COLUMN_NAME,COLUMN_STEPGOAL};
+        Cursor cursor = database.query(TABLE_STEPS, allColumns, null, null,
+                null, null, COLUMN_STEP + " ASC");
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                StepCounter stepCounter = new StepCounter();
+                mostSteps = stepCounter.setSteps(cursor.getString(1));
+
+            } while (cursor.moveToNext());
+        }
+
+        return mostSteps;
+    }
+
+
+    public String findName() {
+
+        String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+        String checkTheDate = "";
+        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
+                + COLUMN_DATETIME + " = " + dateTime;
+
+        database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(allRecipesQuery, null);
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                StepCounter stepCounter = new StepCounter();
+                checkTheDate = stepCounter.setName(cursor.getString(3));
+
+            } while (cursor.moveToNext());
+        }
+        return checkTheDate;
+    }
+    public String getGoal() {
+
+        String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+        String checkTheDate = "";
+        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
+                + COLUMN_DATETIME + " = " + dateTime;
+
+        database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(allRecipesQuery, null);
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                StepCounter stepCounter = new StepCounter();
+                checkTheDate = stepCounter.setDate(cursor.getString(4));
+
+            } while (cursor.moveToNext());
+        }
+        return checkTheDate;
+    }
+    void deleteAll(){
+        database.delete(TABLE_STEPS, null, null);
+
     }
 
 }

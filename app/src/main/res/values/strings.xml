@@ -9,5 +9,11 @@
     <string name="Uppdate">Uppdate</string>
     <string name="Start">Start</string>
     <string name="AmountofSteps">Loading Steps</string>
-
+    <string name="delete">Delete all data</string>
+    <string name="changeProfile">Profile Settings</string>
+    <string name="Stop">Stop count</string>
+    <string name="nameEdit">Name</string>
+    <string name="stepGoalEdit">Step Goal</string>
+    <string name="bestday">Best Day</string>
+    <string name="startPage">Daily step recommendation is 10,000 steps</string>
 </resources>

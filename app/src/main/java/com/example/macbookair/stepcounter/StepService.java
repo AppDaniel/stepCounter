@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -26,11 +27,13 @@ public class StepService extends Service implements SensorEventListener {
         super.onDestroy();
     }
 
+
+
     @Override
     public void onCreate() {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.
-                getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+                getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
         DatabaseHandler db = new DatabaseHandler(this);
         String test = db.findSteps();
 
@@ -43,31 +46,29 @@ public class StepService extends Service implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
 
 
+        if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
 
-
-            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-
-            float[] values = event.values;
-            float x = values[0];
-            float y = values[1];
-            float z = values[2];
-
-
-            float absoluteAcceleration = (x * x + y * y + z * z) /
-                    (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-
-            if (absoluteAcceleration >= 4) {
+//            float[] values = event.values;
+//            float x = values[0];
+//            float y = values[1];
+//            float z = values[2];
+//
+//
+//            float absoluteAcceleration = (x * x + y * y + z * z) /
+//                    (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
+//
+//            if (absoluteAcceleration >= 4) {
 
                 steps++;
 
-                DatabaseHandler sqlFinder;
-                sqlFinder = new DatabaseHandler(this);
+                DatabaseHandler sqlFinder = new DatabaseHandler(this);
                 sqlFinder.insert();
 
                 String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
                 StepCounter step = sqlFinder.update(steps, dateTime);
 
-            }
+
+//            }
 
         }
     }
