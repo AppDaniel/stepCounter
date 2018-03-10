@@ -10,7 +10,7 @@
     <string name="Start">Start</string>
     <string name="AmountofSteps">Loading Steps</string>
     <string name="delete">Delete all data</string>
-    <string name="changeProfile">Profile Settings</string>
+    <string name="changeProfile">Update Profile</string>
     <string name="Stop">Stop count</string>
     <string name="nameEdit">Name</string>
     <string name="stepGoalEdit">Your Daily Goal</string>
