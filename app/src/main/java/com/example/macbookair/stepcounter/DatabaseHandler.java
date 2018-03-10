@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -175,8 +176,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public String findNameYesterday() {
 
-        String findYesterdayName = testa(3);
-        return findYesterdayName;
+        String yesterDayDateTime = getYesterdayDateString();
+        String checkTheDate = "";
+
+        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
+                + COLUMN_DATETIME + " = " + yesterDayDateTime;
+
+        database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(allRecipesQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                StepCounter stepCounter = new StepCounter();
+                checkTheDate = stepCounter.setName(cursor.getString(3));
+            } while (cursor.moveToNext());
+
+        }
+        return checkTheDate;
     }
 
     public String findStepGoalYesterday() {
@@ -191,7 +207,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return getGoal;
     }
 
-    private String testa(int num){
+    private String testa(int num) {
 
         String amountOfStepsDb = "";
 
