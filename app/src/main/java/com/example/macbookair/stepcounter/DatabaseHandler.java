@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.EditText;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,10 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-/**
- * Created by macbookair on 2018-03-03.
- */
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -35,14 +29,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         final String DATABASE_CREAT = "create table tablesteps (id integer primary key" +
                 " autoincrement, step text, datetime text, name text, stepgoal integer)";
         sqLiteDatabase.execSQL(DATABASE_CREAT);
-
     }
 
     @Override
@@ -50,7 +42,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_STEPS);
         onCreate(sqLiteDatabase);
-
     }
 
     void insert() {
@@ -60,7 +51,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     StepCounter createDay(Integer step, String date) {
-
 
         ContentValues contentValues = new ContentValues();
         ContentValues uppdateDB = new ContentValues();
@@ -73,10 +63,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         long id = database.insert(TABLE_STEPS, null, contentValues);
 
-
         stepCounter1.setId(id);
         stepCounter1.setSteps(stepToSendBack);
-//    }
         return stepCounter1;
     }
 
@@ -85,7 +73,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         List<StepCounter> steps = new ArrayList<>();
         Cursor cursor = database.query(TABLE_STEPS, allColumns,
                 null, null, null, null, null);
-
 
         cursor.moveToFirst();
 
@@ -121,13 +108,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     StepCounter update(Integer steps, String date) {
         ContentValues uppdateDB = new ContentValues();
 
-
         int datum = Integer.parseInt(date.toString());
 
         uppdateDB.put("datetime", date);
         uppdateDB.put("step", steps);
         database.update(TABLE_STEPS, uppdateDB, "datetime=" + datum, null);
-
 
         return null;
     }
@@ -146,7 +131,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         uppdateDB.put("name", name);
         uppdateDB.put("stepgoal", stepgoal);
         database.update(TABLE_STEPS, uppdateDB, "datetime=" + datum, null);
-
 
         return null;
 
@@ -170,6 +154,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return mostSteps;
     }
+
     public String findSteps() {
 
         String amountOfStepsDb = testa(1);
@@ -181,8 +166,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String checkTheDate = testa(2);
         return checkTheDate;
     }
-
-
 
     public String findName() {
 

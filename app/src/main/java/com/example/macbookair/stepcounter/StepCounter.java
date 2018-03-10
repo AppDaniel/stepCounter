@@ -10,7 +10,7 @@ public class StepCounter {
     private long id;
     private String date;
     private String name;
-    private int stepgoal;
+    private long stepgoal;
 
     @Override
     public String toString() {
@@ -53,11 +53,11 @@ public class StepCounter {
         return name;
     }
 
-    public int getStepgoal() {
+    public long getStepgoal() {
         return stepgoal;
     }
 
-    public int setStepgoal(int stepgoal) {
+    public long setStepgoal(int stepgoal) {
         this.stepgoal = stepgoal;
         return stepgoal;
     }

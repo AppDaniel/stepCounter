@@ -20,10 +20,6 @@ public class Profile extends AppCompatActivity {
     TextView mostSteps, nameText, goalText;
     DatabaseHandler sqlFinder;
     ImageView imageView;
-//    final static int MY_REQUEST_CODE = 200;
-//    PermissonHandler permissionHandler;
-//    private int GALLERY = 1, CAMERA = 2;;
-//    private static final int PROFILE_PAGE_REQUEST_CODE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +30,6 @@ public class Profile extends AppCompatActivity {
 
         sqlFinder = new DatabaseHandler(this);
         sqlFinder.insert();
-
-//        permissionHandler = new PermissonHandler();
-//        permissionHandler.checkPermissions(this, MY_REQUEST_CODE);
 
         imageView = findViewById(R.id.imageView);
         Drawable myDraw = getResources().getDrawable(R.drawable.steps);
