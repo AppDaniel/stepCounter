@@ -1,9 +1,5 @@
 package com.example.macbookair.stepcounter;
 
-/**
- * Created by macbookair on 2018-03-03.
- */
-
 public class StepCounter {
 
     private String step;

@@ -10,12 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.util.List;
-
-/**
- * Created by macbookair on 2018-03-05.
- */
 
 public class HistoryList extends ListActivity {
 

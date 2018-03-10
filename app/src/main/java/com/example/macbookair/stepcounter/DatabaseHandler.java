@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -243,7 +242,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     void deleteAll() {
         database.delete(TABLE_STEPS, null, null);
-
 
     }
 

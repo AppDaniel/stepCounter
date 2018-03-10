@@ -11,14 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-/**
- * Created by macbookair on 2018-03-08.
- */
-
 public class UserSettings extends AppCompatActivity  {
 
     ChangeActivities changeActivities;

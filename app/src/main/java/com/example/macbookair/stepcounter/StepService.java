@@ -28,7 +28,6 @@ public class StepService extends Service implements SensorEventListener {
     }
 
 
-
     @Override
     public void onCreate() {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -48,28 +47,13 @@ public class StepService extends Service implements SensorEventListener {
 
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
 
-//            float[] values = event.values;
-//            float x = values[0];
-//            float y = values[1];
-//            float z = values[2];
-//
-//
-//            float absoluteAcceleration = (x * x + y * y + z * z) /
-//                    (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-//
-//            if (absoluteAcceleration >= 4) {
+            steps++;
 
-                steps++;
+            DatabaseHandler sqlFinder = new DatabaseHandler(this);
+            sqlFinder.insert();
 
-                DatabaseHandler sqlFinder = new DatabaseHandler(this);
-                sqlFinder.insert();
-
-                String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-                StepCounter step = sqlFinder.update(steps, dateTime);
-
-
-//            }
-
+            String dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+            StepCounter step = sqlFinder.update(steps, dateTime);
         }
     }
 

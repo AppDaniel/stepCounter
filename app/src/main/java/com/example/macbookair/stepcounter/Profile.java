@@ -27,22 +27,12 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-
         sqlFinder = new DatabaseHandler(this);
         sqlFinder.insert();
 
         imageView = findViewById(R.id.imageView);
         Drawable myDraw = getResources().getDrawable(R.drawable.steps);
         imageView.setImageDrawable(myDraw);
-
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showPictureDialog();
-//
-//
-//            }
-//        });
 
         String mosteSteps = sqlFinder.sortMosteSteps();
         mostSteps = findViewById(R.id.mostStepstextView);
@@ -55,13 +45,6 @@ public class Profile extends AppCompatActivity {
         String goal = sqlFinder.getGoal();
         goalText = findViewById(R.id.goalTextViewP);
         goalText.setText(goal);
-
-
-
-
-
-
-
     }
 
     @Override
@@ -93,95 +76,4 @@ public class Profile extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-//    private void showPictureDialog(){
-//        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-//        pictureDialog.setTitle("Select Action");
-//        String[] pictureDialogItems = {
-//                "Select photo from gallery",
-//                "Capture photo from camera" };
-//        pictureDialog.setItems(pictureDialogItems,
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        switch (which) {
-//                            case 0:
-//                                choosePhotoFromGallary();
-//                                break;
-//                            case 1:
-//                                takePhotoFromCamera();
-//                                break;
-//                        }
-//                    }
-//                });
-//        pictureDialog.show();
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode,
-//                                           String permissions[], int[] grantResults) {
-//        switch (requestCode) {
-//            case MY_REQUEST_CODE: {
-//                boolean readAccepted = false;
-//                boolean writeAccepted = false;
-//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-//                    readAccepted = true;
-//                if (grantResults[1] == PackageManager.PERMISSION_GRANTED)
-//                    writeAccepted = true;
-//                if (readAccepted && writeAccepted)
-//                    Toast.makeText(this, "Permisson Okay", Toast.LENGTH_SHORT).show();
-//                else
-//                    Toast.makeText(this, "Permisson Not okay", Toast.LENGTH_SHORT).show();
-//
-//
-//            }
-//
-//        }
-//
-//
-//
-//    }
-//
-//    public void choosePhotoFromGallary() {
-//        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//        startActivityForResult(galleryIntent, GALLERY);
-//    }
-//
-//    private void takePhotoFromCamera() {
-//        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(intent, CAMERA);
-//    }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == GALLERY) {
-//            if (data != null) {
-//                Uri contentURI = data.getData();
-//                try {
-//                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-//
-//                    Toast.makeText(this, "Image Saved!", Toast.LENGTH_SHORT).show();
-//                    imageView.setImageBitmap(bitmap);
-//
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//        } else if (requestCode == CAMERA) {
-//            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-//            imageView.setImageBitmap(thumbnail);
-//
-//            Toast.makeText(this, "Image Saved!", Toast.LENGTH_SHORT).show();
-//        }
-//
-//
-//    }
 }

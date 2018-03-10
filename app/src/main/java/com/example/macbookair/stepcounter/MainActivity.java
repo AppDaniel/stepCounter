@@ -3,18 +3,12 @@ package com.example.macbookair.stepcounter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuInflater;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +21,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private static int steps = 0;
-    TextView showStep,personsName;
+    TextView showStep, personsName;
     private DatabaseHandler sqlFinder;
     ChangeActivities changeActivities;
     private ProgressBar progressBar;
@@ -47,13 +41,11 @@ public class MainActivity extends AppCompatActivity {
         String checkTodaysDate = sqlFinder.findTodaysDate();
         dateTime = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
 
-
         if (checkTodaysDate.equals(dateTime)) {
 
             startService(new Intent(this, StepService.class));
 
         } else {
-
 
             String name = sqlFinder.findNameYesterday();
             String stepGoal = sqlFinder.findStepGoalYesterday();
@@ -61,22 +53,16 @@ public class MainActivity extends AppCompatActivity {
 
             StepCounter step = sqlFinder.createDay(steps, dateTime);
 
-            if (stepGoal.isEmpty()){
+            if (stepGoal.isEmpty()) {
 
                 name = "Name";
                 goal = 1000;
                 StepCounter something = sqlFinder.addProfile(name, goal);
 
-            }else{
+            } else {
                 goal = Integer.parseInt(stepGoal);
                 StepCounter something = sqlFinder.addProfile(name, goal);
             }
-
-
-
-
-
-
         }
         showStep = findViewById(R.id.amountSteps);
         personsName = findViewById(R.id.personsName);
