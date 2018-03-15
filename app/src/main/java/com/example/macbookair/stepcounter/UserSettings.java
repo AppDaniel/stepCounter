@@ -1,7 +1,9 @@
 package com.example.macbookair.stepcounter;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class UserSettings extends AppCompatActivity  {
 
@@ -17,18 +20,29 @@ public class UserSettings extends AppCompatActivity  {
     private DatabaseHandler sqlFinder;
     Button update;
     EditText name, stepgoal;
-    String nam;
+    String nam,nameToast,checkTextEdit;
     int goal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.usersetting);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         sqlFinder = new DatabaseHandler(this);
         sqlFinder.insert();
 
         name = findViewById(R.id.nameEditText);
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        nameToast = sharedPreferences.getString("name", name.getText().toString());
+        Toast.makeText(UserSettings.this, "Hello "+ nameToast, Toast.LENGTH_LONG).show();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        checkTextEdit = name.getText().toString();
+
+
+
+
+
+
         stepgoal = findViewById(R.id.goalStepEditText);
         update = findViewById(R.id.saveSettings);
 
@@ -46,17 +60,17 @@ public class UserSettings extends AppCompatActivity  {
 
         if (item.getItemId() == R.id.historik) {
 
-            changeActivities.StartNewActivity(UserSettings.this, HistoryList.class);
+            ChangeActivities.StartNewActivity(UserSettings.this, HistoryList.class);
 
         }
         if (item.getItemId() == R.id.profil) {
 
-            changeActivities.StartNewActivity(UserSettings.this, Profile.class);
+            ChangeActivities.StartNewActivity(UserSettings.this, Profile.class);
 
         }
         if (item.getItemId() == R.id.home) {
 
-            changeActivities.StartNewActivity(UserSettings.this, MainActivity.class);
+            ChangeActivities.StartNewActivity(UserSettings.this, MainActivity.class);
 
         }
 
@@ -78,13 +92,37 @@ public class UserSettings extends AppCompatActivity  {
 
     }
     public void onUpdateClick(View v) {
-        nam = name.getText().toString();
-        String testar = stepgoal.getText().toString();
-        goal =  Integer.parseInt(testar);
-        StepCounter something = sqlFinder.addProfile(nam,goal);
+//        nam = name.getText().toString();
+//        String testar = stepgoal.getText().toString();
+//        goal =  Integer.parseInt(testar);
+            setName();
+            setGoal();
+//        StepCounter something = sqlFinder.addProfile(nam,goal);
         Intent intent = new Intent(this, Profile.class);
         startActivity(intent);
 
+
+    }
+
+    private void setName(){
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        nameToast = sharedPreferences.getString("name", name.getText().toString());
+        Toast.makeText(UserSettings.this, "Hello "+ nameToast, Toast.LENGTH_LONG).show();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        checkTextEdit = name.getText().toString();
+
+        editor.putString("name", name.getText().toString());
+
+        editor.commit();
+    }
+    private void setGoal(){
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        checkTextEdit = stepgoal.getText().toString();
+
+        editor.putString("goalstep", stepgoal.getText().toString());
+
+        editor.commit();
     }
 
 

@@ -57,12 +57,12 @@ public class HistoryList extends ListActivity {
 
         if (item.getItemId() == R.id.action_settings) {
 
-            changeActivities.StartNewActivity(HistoryList.this, MainActivity.class);
+            ChangeActivities.StartNewActivity(HistoryList.this, MainActivity.class);
 
         }
         if (item.getItemId() == R.id.profil) {
 
-            changeActivities.StartNewActivity(HistoryList.this, Profile.class);
+            ChangeActivities.StartNewActivity(HistoryList.this, Profile.class);
 
         }
 

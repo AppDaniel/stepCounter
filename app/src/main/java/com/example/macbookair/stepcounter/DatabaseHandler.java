@@ -21,19 +21,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     final static String COLUMN_DATETIME = "datetime";
     final static String COLUMN_STEPGOAL = "stepgoal";
     final static String COLUMN_NAME = "name";
-    final static String[] allColumns = {COLUMN_ID, COLUMN_STEP, COLUMN_DATETIME, COLUMN_NAME, COLUMN_STEPGOAL};
+//    final static String[] allColumns = {COLUMN_ID, COLUMN_STEP, COLUMN_DATETIME, COLUMN_NAME, COLUMN_STEPGOAL};
     private SQLiteDatabase database;
+    final static String[] allColumns = {COLUMN_ID, COLUMN_STEP, COLUMN_DATETIME};
 
     public DatabaseHandler(Context context) {
-        super(context, "database.db", null, 14);
+        super(context, "database.db", null, 15);
 
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
+//        final String DATABASE_CREAT = "create table tablesteps (id integer primary key" +
+//                " autoincrement, step text, datetime text, name text, stepgoal integer)";
         final String DATABASE_CREAT = "create table tablesteps (id integer primary key" +
-                " autoincrement, step text, datetime text, name text, stepgoal integer)";
+                " autoincrement, step text, datetime text)";
         sqLiteDatabase.execSQL(DATABASE_CREAT);
     }
 
@@ -97,9 +100,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         step.setDate(cursor.getString(2));
 
-        step.setName(cursor.getString(3));
-
-        step.setStepgoal(cursor.getInt(4));
+//        step.setName(cursor.getString(3));
+//
+//        step.setStepgoal(cursor.getInt(4));
 
         return step;
 
@@ -167,44 +170,44 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return checkTheDate;
     }
 
-    public String findName() {
+//    public String findName() {
+//
+//        String findTheName = testa(3);
+//        return findTheName;
+//    }
 
-        String findTheName = testa(3);
-        return findTheName;
-    }
+//    public String findNameYesterday() {
+//
+//        String yesterDayDateTime = getYesterdayDateString();
+//        String checkTheDate = "";
+//
+//        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
+//                + COLUMN_DATETIME + " = " + yesterDayDateTime;
+//
+//        database = this.getWritableDatabase();
+//        Cursor cursor = database.rawQuery(allRecipesQuery, null);
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                StepCounter stepCounter = new StepCounter();
+//                checkTheDate = stepCounter.setName(cursor.getString(3));
+//            } while (cursor.moveToNext());
+//
+//        }
+//        return checkTheDate;
+//    }
 
-    public String findNameYesterday() {
-
-        String yesterDayDateTime = getYesterdayDateString();
-        String checkTheDate = "";
-
-        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
-                + COLUMN_DATETIME + " = " + yesterDayDateTime;
-
-        database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery(allRecipesQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                StepCounter stepCounter = new StepCounter();
-                checkTheDate = stepCounter.setName(cursor.getString(3));
-            } while (cursor.moveToNext());
-
-        }
-        return checkTheDate;
-    }
-
-    public String findStepGoalYesterday() {
-
-        String yesterdayGoal = testa(4);
-        return yesterdayGoal;
-    }
-
-    public String getGoal() {
-
-        String getGoal = testa(4);
-        return getGoal;
-    }
+//    public String findStepGoalYesterday() {
+//
+//        String yesterdayGoal = testa(4);
+//        return yesterdayGoal;
+//    }
+//
+//    public String getGoal() {
+//
+//        String getGoal = testa(4);
+//        return getGoal;
+//    }
 
     private String testa(int num) {
 
