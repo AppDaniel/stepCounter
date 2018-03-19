@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 //            int goal;
 
             StepCounter step = sqlFinder.createDay(steps, dateTime);
+            startService(new Intent(this, StepService.class));
 
 //            if (name.isEmpty()) {
 //
