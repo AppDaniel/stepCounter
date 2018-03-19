@@ -49,7 +49,6 @@ public class Profile extends AppCompatActivity {
         mostSteps = findViewById(R.id.mostStepstextView);
         mostSteps.setText(mosteSteps);
 
-//        String name = sqlFinder.findName();
         nameText = findViewById(R.id.nameTextViewP);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -60,12 +59,7 @@ public class Profile extends AppCompatActivity {
         }else
             nameText.setText(userName);
 
-
-//        nameText.setText(name);
-
-//        String goal = sqlFinder.getGoal();
         goalText = findViewById(R.id.goalTextViewP);
-//        goalText.setText(goal);
 
         String goalStep = sharedPreferences.getString("goalstep", "?");
         if (goalStep.isEmpty()){

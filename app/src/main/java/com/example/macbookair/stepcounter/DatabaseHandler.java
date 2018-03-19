@@ -143,7 +143,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String mostSteps = "";
         Cursor cursor = database.query(TABLE_STEPS, allColumns, null, null,
-                null, null, COLUMN_STEP + " ASC");
+                null, null, COLUMN_STEP + " DESC");
 
         database = this.getWritableDatabase();
 
@@ -169,45 +169,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String checkTheDate = testa(2);
         return checkTheDate;
     }
-
-//    public String findName() {
-//
-//        String findTheName = testa(3);
-//        return findTheName;
-//    }
-
-//    public String findNameYesterday() {
-//
-//        String yesterDayDateTime = getYesterdayDateString();
-//        String checkTheDate = "";
-//
-//        String allRecipesQuery = "SELECT * FROM " + TABLE_STEPS + " WHERE "
-//                + COLUMN_DATETIME + " = " + yesterDayDateTime;
-//
-//        database = this.getWritableDatabase();
-//        Cursor cursor = database.rawQuery(allRecipesQuery, null);
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                StepCounter stepCounter = new StepCounter();
-//                checkTheDate = stepCounter.setName(cursor.getString(3));
-//            } while (cursor.moveToNext());
-//
-//        }
-//        return checkTheDate;
-//    }
-
-//    public String findStepGoalYesterday() {
-//
-//        String yesterdayGoal = testa(4);
-//        return yesterdayGoal;
-//    }
-//
-//    public String getGoal() {
-//
-//        String getGoal = testa(4);
-//        return getGoal;
-//    }
 
     private String testa(int num) {
 
